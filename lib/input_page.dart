@@ -1,10 +1,15 @@
+import 'package:bmi/result_page.dart';
 import 'package:flutter/material.dart';
 import 'icon-card.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'reusable-card.dart';
+import 'constant.dart';
+import 'rounded_button.dart';
 
-const buttonContainerHeight = 65.0;
-const colourCard = Color(0xFF1D1E33);
-const bottomContainer = Color(0xFFEB1555);
+enum Gender {
+  male,
+  female,
+}
 
 class InputPage extends StatefulWidget {
   const InputPage({super.key});
@@ -14,6 +19,8 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
+  Gender? calledGender;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,38 +34,92 @@ class _InputPageState extends State<InputPage> {
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: Row(
               children: [
                 Expanded(
                   child: ReusableCard(
-                      colour: colourCard,
+                      onPress: () => setState(
+                            () {
+                              calledGender = Gender.male;
+                            },
+                          ),
+                      colour: calledGender == Gender.male
+                          ? kColourCard
+                          : kInActiveCardColour,
                       cardChild: CardIcon(
                           iconCard: const Icon(
                             FontAwesomeIcons.mars,
                             size: 60.0,
                           ),
-                          titleText: 'MALE')),
+                          titleText: 'Male')),
                 ),
                 Expanded(
                   child: ReusableCard(
-                      colour: colourCard,
+                      onPress: () => setState(
+                            () {
+                              calledGender = Gender.female;
+                            },
+                          ),
+                      colour: calledGender == Gender.female
+                          ? kColourCard
+                          : kInActiveCardColour,
                       cardChild: CardIcon(
                           iconCard: const Icon(
                             FontAwesomeIcons.venus,
                             size: 60.0,
                           ),
-                          titleText: 'FEMALE')),
+                          titleText: 'Female')),
                 ),
               ],
             ),
           ),
           Expanded(
             child: ReusableCard(
-              colour: colourCard,
+              onPress: () => print('hello range slider'),
+              colour: kColourCard,
               cardChild: Column(
-                children: [Icon(FontAwesomeIcons.mars), Text('MALE')],
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('HEIGHT'),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text(kHeightSlider.toString(), style: kTitleStyle),
+                      Text('cm', style: kLabelTextStyle),
+                    ],
+                  ),
+                  SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                      inactiveTrackColor: Colors.black,
+                      activeTrackColor: Colors.white,
+                      thumbColor: Color(0xFFEB1555),
+                      overlayColor: Color(0x29EB1555),
+                      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 15.0),
+                      overlayShape: RoundSliderOverlayShape(overlayRadius: 30.0)
+                    ),
+                    child: Slider(
+                      value: kHeightSlider.toDouble(),
+                      min: kMinSlider,
+                      max: kMaxSlider,
+                      inactiveColor: kInActiveColourSlider,
+                      onChanged: (value) {
+                        setState(
+                          () {
+                            kHeightSlider = value.round();
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -67,60 +128,110 @@ class _InputPageState extends State<InputPage> {
               children: [
                 Expanded(
                   child: ReusableCard(
-                    colour: colourCard,
-                    cardChild: const BottomCardIcon(
-                        iconCard: Icon(FontAwesomeIcons.circleMinus, size: 45.0,),
-                        iconCardTwo: Icon(FontAwesomeIcons.circlePlus,size: 45.0),
-                        titleText: 'WEIGHT'),
+                    onPress: () => print('hello weight'),
+                    colour: kColourCard,
+                    cardChild: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'WEIGHT',
+                          style: kLabelTextStyle,
+                        ),
+                        Text(
+                          kWeight.toString(),
+                          style: kTitleStyle,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RoundedIconButton(
+                              onPress: () => setState(
+                                () {
+                                  kWeight--;
+                                },
+                              ),
+                              icon: Icon(FontAwesomeIcons.minus),
+                            ),
+                            SizedBox(width: 10),
+                            RoundedIconButton(
+                              onPress: () => setState(
+                                () {
+                                  kWeight++;
+                                },
+                              ),
+                              icon: Icon(FontAwesomeIcons.add),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
                   child: ReusableCard(
-                    colour: colourCard,
-                    cardChild: const BottomCardIcon(
-                        iconCard: Icon(FontAwesomeIcons.circleMinus, size: 45.0,),
-                        iconCardTwo: Icon(FontAwesomeIcons.circlePlus,size: 45.0),
-                        titleText: 'AGE'),
+                    onPress: () => print('hello age'),
+                    colour: kColourCard,
+                    cardChild: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'AGE',
+                          style: kLabelTextStyle,
+                        ),
+                        Text(
+                          kAge.toString(),
+                          style: kTitleStyle,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RoundedIconButton(
+                              icon: Icon(FontAwesomeIcons.minus),
+                              onPress: () => setState(
+                                () {
+                                  kAge--;
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            RoundedIconButton(
+                              icon: Icon(FontAwesomeIcons.add),
+                              onPress: () => setState(
+                                () {
+                                  kAge++;
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-          Container(
-            color: bottomContainer,
-            margin: EdgeInsets.only(top: 10.0),
-            height: buttonContainerHeight,
-            width: double.infinity,
-            child: Center(
-              child: Text(
-                'CALCULATE',
-                style: TextStyle(
-                    fontSize: 24.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.normal),
+          GestureDetector(
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ResultPage(),)),
+            child: Container(
+              color: kBottomContainer,
+              margin: EdgeInsets.only(top: 10.0),
+              height: kButtonContainerHeight,
+              width: double.infinity,
+              child: Center(
+                child: Text(
+                  'CALCULATE',
+                  style: TextStyle(
+                      fontSize: 24.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.normal),
+                ),
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class ReusableCard extends StatelessWidget {
-  ReusableCard({required this.colour, required this.cardChild});
-
-  final Color colour;
-  final Widget cardChild;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: cardChild,
-      margin: EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: colour,
-        borderRadius: BorderRadius.circular(10),
       ),
     );
   }

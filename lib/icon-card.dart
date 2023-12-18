@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'constant.dart';
 
 class CardIcon extends StatelessWidget {
   CardIcon({required this.iconCard,required this.titleText});
@@ -17,7 +18,7 @@ class CardIcon extends StatelessWidget {
         SizedBox(height: boxSize),
         Text(
           titleText,
-          style: TextStyle(fontSize: fontSize),
+          style: kLabelTextStyle,
         ),
       ],
     );
@@ -40,10 +41,10 @@ class BottomCardIcon extends StatelessWidget {
       children: [
         Text(
           titleText,
-          style: TextStyle(fontSize: fontSize,fontWeight: FontWeight.w100),
+          style: kLabelTextStyle,
         ),
         SizedBox(height: boxSize),
-        Text('87',style: TextStyle(fontSize: 54.0,color: Colors.white, fontWeight: FontWeight.bold),),
+        Text('87',style: kTitleStyle,),
         Padding(
           padding: const EdgeInsets.only(right: 10.0,left: 10.0),
           child: Row(
