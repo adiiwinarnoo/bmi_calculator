@@ -21,5 +21,5 @@ class MainApp extends StatelessWidget {
       ),
       home: InputPage(),
     );
-  }
+  } 
 }
